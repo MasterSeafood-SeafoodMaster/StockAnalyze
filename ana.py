@@ -12,8 +12,17 @@ with open('StockIdList.csv', newline='', encoding='utf_8_sig') as csvfile:
 			pass
 		elif result=="nodata":
 			print(result)
-		else:
-			with open("df.txt", "a", encoding='utf_8_sig') as myfile:
+		elif result[0]=="very high":
+			with open("df_High.txt", "a", encoding='utf_8_sig') as myfile:
+				print(row[0], row[1])
+				print(result[0])
+				for i in range(1, len(result)):
+					myfile.write(str(result[i]))
+					myfile.write(',')
+				myfile.write(str( round((result[3] - result[5])/result[3], 4) ))
+				myfile.write("\n")
+		elif result[0]=="very low":
+			with open("df_Low.txt", "a", encoding='utf_8_sig') as myfile:
 				print(row[0], row[1])
 				print(result[0])
 				for i in range(1, len(result)):

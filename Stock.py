@@ -17,8 +17,8 @@ def Analyze(stock_name, stock, howlong):
 
 		if(now_price<mean-std):
 			return ["very low", stock_name, stock, round(mean, 2), round(std, 2), round(now_price, 2)]
-		elif(now_price<mean):
-			return "dont"#["low", stock, mean, std, now_price]
+		elif(now_price>mean+std):
+			return ["very high", stock_name, stock, round(mean, 2), round(std, 2), round(now_price, 2)]
 		else:
 			return "dont"
 	except:
