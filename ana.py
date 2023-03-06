@@ -2,23 +2,24 @@ import Stock as s
 import yfinance as yf
 import csv
 
-with open('StockIdList.csv', newline='') as csvfile:
+with open('StockIdList.csv', newline='', encoding='utf_8_sig') as csvfile:
 	rows = csv.reader(csvfile)
 	for row in rows:
 
 		#print(row)
-		result = s.Analyze(row[0]+".TW", "2y")
+		result = s.Analyze(row[1], row[0]+".TW", "2y")
 		if result=="dont":
 			pass
 		elif result=="nodata":
 			print(result)
 		else:
-			with open("df.txt", "a") as myfile:
+			with open("df.txt", "a", encoding='utf_8_sig') as myfile:
+				print(row[0], row[1])
 				print(result[0])
 				for i in range(1, len(result)):
 					myfile.write(str(result[i]))
 					myfile.write(',')
-				myfile.write(str( round((result[2] - result[4])/result[2], 4) ))
+				myfile.write(str( round((result[3] - result[5])/result[3], 4) ))
 				myfile.write("\n")
 
 

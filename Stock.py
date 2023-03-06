@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup 
 import csv
 
-def Analyze(stock, howlong):
+def Analyze(stock_name, stock, howlong):
 	try:
 		df = yf.download(stock,period=howlong,interval='1d')["Adj Close"]
 		df = df.iloc[::-1]
@@ -16,7 +16,7 @@ def Analyze(stock, howlong):
 		now_price = df[0]
 
 		if(now_price<mean-std):
-			return ["very low", stock, round(mean, 2), round(std, 2), round(now_price, 2)]
+			return ["very low", stock_name, stock, round(mean, 2), round(std, 2), round(now_price, 2)]
 		elif(now_price<mean):
 			return "dont"#["low", stock, mean, std, now_price]
 		else:
@@ -42,8 +42,13 @@ def getId(herf):
 	sel = soup.select("TR TD a.none")
 	for s in sel:
 		sl = s.text.replace("\n", "").split(" ")
-		print(sl)
-		StockIdList.append([sl[0]])
+		df = yf.download(sl[0]+".TW",period="2y",interval='1d')["Adj Close"]
+		if len(df)>0:
+			StockIdList.append([sl[0], sl[1]])
+			print("save:", sl[0], sl[1])
+		else:
+			print("drop:", sl[0], sl[1])
+		
 
 def SaveCSV():
 	hList = gethList()
@@ -54,8 +59,8 @@ def SaveCSV():
 			pass
 	np_StockIdList = np.array(StockIdList)
 	print(np_StockIdList)
-	np.savetxt('./StockIdList.csv', np_StockIdList, delimiter=",", fmt='%s')
+	np.savetxt('./StockIdList.csv', np_StockIdList, encoding='utf_8_sig', delimiter=",", fmt='%s')
 
 
-
+#SaveCSV()
 #print(Analyze("1101.TW", "2y"))
